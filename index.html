@@ -1,426 +1,267 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Для Ксюши ❤️</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Для Ксюши ❤️</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<style>
+*{box-sizing:border-box;}
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            color: #2b2b2b;
-            text-align: center;
-            overflow-x: hidden;
-            background: radial-gradient(circle at top left, #ffd6e8 0%, transparent 35%), radial-gradient(circle at top right, #d9ccff 0%, transparent 35%), linear-gradient(135deg, #fff1f6, #f4efff, #fff8e8);
-        }
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:'Segoe UI', Arial, sans-serif;
+    text-align:center;
+    background:
+        radial-gradient(circle at top left, #ffd6e8, transparent 40%),
+        radial-gradient(circle at top right, #d9ccff, transparent 40%),
+        linear-gradient(135deg, #fff1f6, #f4efff, #fff8e8);
+}
 
-        .app {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 30px 15px;
-        }
+.app{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
 
-        #intro {
-            background: rgba(255,255,255,0.75);
-            border-radius: 28px;
-            padding: 28px 24px;
-            max-width: 460px;
-            width: 100%;
-            box-shadow: 0 20px 50px rgba(120,80,120,0.18);
-            margin-bottom: 28px;
-        }
+#intro{
+    background:rgba(255,255,255,0.8);
+    border-radius:30px;
+    padding:25px;
+    max-width:450px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.15);
+    margin-bottom:20px;
+}
 
-        h2 {
-            margin: 0 0 14px;
-            font-size: 32px;
-        }
+h1{margin:20px 0;}
 
-        p {
-            margin: 0;
-            font-size: 17px;
-            line-height: 1.5;
-            color: #555;
-        }
+.cards{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
 
-        h1 {
-            margin: 0 0 28px;
-            font-size: 34px;
-            line-height: 1.25;
-        }
+.card{
+    width:170px;
+    height:230px;
+    background:white;
+    border-radius:25px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:60px;
+    cursor:pointer;
+    box-shadow:0 10px 30px rgba(0,0,0,0.15);
+    transition:0.3s;
+}
 
-        .cards {
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-            flex-wrap: wrap;
-            max-width: 760px;
-        }
+.card:hover{
+    transform:translateY(-8px);
+}
 
-        .card {
-            width: 185px;
-            height: 245px;
-            background: rgba(255,255,255,0.9);
-            border-radius: 28px;
-            box-shadow: 0 18px 40px rgba(90,70,90,0.18);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            font-size: 64px;
-            transition: 0.25s;
-            user-select: none;
-            overflow: hidden;
-            border: 2px solid rgba(255,255,255,0.9);
-        }
+.card img{
+    max-width:120px;
+    margin-bottom:10px;
+}
 
-            .card:hover {
-                transform: translateY(-8px);
-            }
+.opened{
+    flex-direction:column;
+    font-size:18px;
+}
 
-            .card img {
-                max-width: 135px;
-                max-height: 125px;
-                object-fit: contain;
-                margin-bottom: 12px;
-            }
+.selectedCard{
+    border:4px solid #ff7aa8;
+}
 
-        .opened {
-            flex-direction: column;
-            font-size: 18px;
-            padding: 14px;
-        }
+button{
+    margin-top:30px;
+    padding:14px 40px;
+    border:none;
+    border-radius:999px;
+    font-size:18px;
+    background:#ff7aa8;
+    color:white;
+    cursor:pointer;
+}
 
-        .selectedCard {
-            border: 4px solid #ff7aa8;
-            transform: translateY(-8px) scale(1.04);
-        }
+.hidden{display:none;}
 
-        .badCard {
-            border: 4px solid #999;
-        }
+.confetti{
+    position:fixed;
+    top:-20px;
+    width:10px;
+    height:10px;
+    animation:fall 3s linear forwards;
+}
 
-        button {
-            margin-top: 34px;
-            padding: 15px 42px;
-            border: none;
-            border-radius: 999px;
-            font-size: 19px;
-            font-weight: 600;
-            color: white;
-            background: linear-gradient(135deg,#ff8fbd,#ff5f93);
-            cursor: pointer;
-            box-shadow: 0 12px 28px rgba(255,95,147,0.35);
-            transition: 0.25s;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .confetti {
-            position: fixed;
-            top: -20px;
-            width: 9px;
-            height: 14px;
-            border-radius: 3px;
-            z-index: 9999;
-            animation: fall linear forwards;
-        }
-
-        @keyframes fall {
-            0% {
-                transform: translateY(-20px) rotate(0deg);
-                opacity: 1;
-            }
-
-            100% {
-                transform: translateY(110vh) rotate(720deg);
-                opacity: 0;
-            }
-        }
-
-        @media(max-width:650px) {
-            h1 {
-                font-size: 28px;
-            }
-
-            .cards {
-                gap: 16px;
-            }
-
-            .card {
-                width: 145px;
-                height: 200px;
-                font-size: 52px;
-            }
-
-                .card img {
-                    max-width: 110px;
-                    max-height: 100px;
-                }
-        }
-    </style>
+@keyframes fall{
+    to{transform:translateY(110vh);opacity:0;}
+}
+</style>
 </head>
 
 <body>
 
-    <div class="app">
+<div class="app">
 
-        <div id="intro">
-            <h2>Привет, Ксюша ❤️</h2>
-            <p>
-                Это маленькое приложение сделал Кирилл специально для тебя.<br>
-                Сегодня всё решает удача 😄<br>
-                Сначала пройди выбор 50 на 50!
-            </p>
-        </div>
+<div id="intro">
+<h2>Привет, Ксюша ❤️</h2>
+<p>Сначала пройди 50/50 😄</p>
+</div>
 
-        <h1 id="title">Нажми далее</h1>
+<h1 id="title">Нажми далее</h1>
+<div class="cards" id="cards"></div>
+<button id="btn" onclick="next()">Далее</button>
 
-        <div class="cards" id="cards"></div>
+</div>
 
-        <button id="btn" onclick="next()">Далее</button>
+<script>
+let step=0, selected=false, val="", gameOver=false;
 
-    </div>
+let result={};
 
-    <script>
-        let step = 0;
-        let selected = false;
-        let val = "";
-        let gameOver = false;
+const chance=[
+ {text:"Проходишь дальше",good:true},
+ {text:"Сегодня без мака 😭",good:false}
+];
 
-        let result = {
-            chance: "",
-            burger: "",
-            potato: "",
-            size: "",
-            nuggets: ""
-        };
+const burgers=[
+ {text:"Биг Хит",img:"bighit.jpg"},
+ {text:"Чикен Премьер",img:"chicken.png"},
+ {text:"Гранд Де Люкс",img:"grand.jpg"}
+];
 
-        const chanceCards = [
-            { text: "Проходишь дальше", good: true },
-            { text: "К сожалению, сегодня без мака", good: false }
-        ];
+const yesNo=["Да","Нет"];
+const sizes=["Маленькая","Средняя"];
 
-        const burgers = [
-            { text: "Биг Хит", img: "images/bighit.jpg" },
-            { text: "Чикен Премьер", img: "images/chicken.png" },
-            { text: "Гранд Де Люкс", img: "images/grand.jpg" }
-        ];
+function shuffle(a){return [...a].sort(()=>Math.random()-0.5);}
 
-        const yesNo = [
-            { text: "Да" },
-            { text: "Нет" }
-        ];
+function render(data){
+ selected=false; val="";
+ let box=document.getElementById("cards");
+ box.innerHTML="";
+ let arr=shuffle(data);
 
-        const sizes = [
-            { text: "Маленькая" },
-            { text: "Средняя" }
-        ];
+ arr.forEach(item=>{
+  let card=document.createElement("div");
+  card.className="card";
+  card.textContent="?";
 
-        function shuffle(arr) {
-            let a = [...arr];
+  card.onclick=()=>{
+   if(selected)return;
+   selected=true;
+   val=item.text||item;
 
-            for (let i = a.length - 1; i > 0; i--) {
-                let j = Math.floor(Math.random() * (i + 1));
-                [a[i], a[j]] = [a[j], a[i]];
-            }
+   document.querySelectorAll(".card").forEach((c,i)=>{
+    let el=arr[i];
+    if(el.img){
+     c.innerHTML=`<img src="${el.img}"><div>${el.text}</div>`;
+    }else{
+     c.innerHTML=el.text||el;
+    }
+    c.classList.add("opened");
+   });
 
-            return a;
-        }
+   card.classList.add("selectedCard");
+  };
 
-        function render(data) {
-            selected = false;
-            val = "";
+  box.appendChild(card);
+ });
+}
 
-            const box = document.getElementById("cards");
-            box.innerHTML = "";
+function next(){
 
-            const arr = shuffle(data);
+ if(gameOver){restart();return;}
 
-            arr.forEach(item => {
-                const card = document.createElement("div");
-                card.className = "card";
-                card.textContent = "?";
+ if(step===0){
+  document.getElementById("intro").classList.add("hidden");
+  step=1;
+  document.getElementById("title").textContent="50/50 😈";
+  render(chance);
+  return;
+ }
 
-                card.onclick = () => {
-                    if (selected) return;
+ if(!selected)return alert("Выбери 😄");
 
-                    selected = true;
-                    val = item.text;
+ if(step===1){
+  if(val.includes("без")){
+   gameOver=true;
+   document.getElementById("title").textContent="К сожалению сегодня без мака 😭";
+   document.getElementById("cards").innerHTML="";
+   document.getElementById("btn").textContent="Заново";
+   return;
+  }
+  step=2;
+  document.getElementById("title").textContent="Выбираем бургер 🍔";
+  render(burgers);
+ }
 
-                    if (step === 1) {
-                        result.chance = item.good ? "good" : "bad";
-                    }
+ else if(step===2){
+  result.burger=val;
+  step=3;
+  document.getElementById("title").textContent="Картошка? 🍟";
+  render(yesNo);
+ }
 
-                    document.querySelectorAll(".card").forEach((c, i) => {
-                        const el = arr[i];
+ else if(step===3){
+  if(val==="Да"){
+   step=4;
+   document.getElementById("title").textContent="Размер?";
+   render(sizes);
+  }else{
+   result.potato="Нет";
+   step=5;
+   document.getElementById("title").textContent="Нагетсы? 🐔";
+   render(yesNo);
+  }
+ }
 
-                        if (el.img) {
-                            c.innerHTML = `
-                            <img src="${el.img}" alt="${el.text}">
-                            <strong>${el.text}</strong>
-                        `;
-                        } else {
-                            c.innerHTML = `<strong>${el.text}</strong>`;
-                        }
+ else if(step===4){
+  result.potato=val;
+  step=5;
+  document.getElementById("title").textContent="Нагетсы? 🐔";
+  render(yesNo);
+ }
 
-                        c.classList.add("opened");
-                        c.onclick = null;
+ else if(step===5){
+  result.nuggets=val;
+  step=6;
 
-                        if (step === 1 && el.good === false) {
-                            c.classList.add("badCard");
-                        }
-                    });
+  document.getElementById("title").innerHTML=`
+  ТВОЙ ЗАКАЗ ❤️<br><br>
+  🍔 ${result.burger}<br>
+  🍟 ${result.potato}<br>
+  🐔 ${result.nuggets}
+  `;
 
-                    if (step === 1 && item.good === false) {
-                        card.classList.add("badCard");
-                    } else {
-                        card.classList.add("selectedCard");
-                    }
-                };
+  document.getElementById("cards").innerHTML="";
+  document.getElementById("btn").textContent="Заново";
+  confetti();
+ }
 
-                box.appendChild(card);
-            });
-        }
+ else restart();
+}
 
-        function next() {
-            if (gameOver) {
-                restart();
-                return;
-            }
+function restart(){
+ location.reload();
+}
 
-            if (step === 0) {
-                document.getElementById("intro").classList.add("hidden");
-                step = 1;
-                document.getElementById("title").textContent = "Выбор 50 на 50 😈";
-                render(chanceCards);
-                return;
-            }
-
-            if (!selected && step !== 5) {
-                alert("Сначала выбери карточку 😄");
-                return;
-            }
-
-            if (step === 1) {
-                if (result.chance === "bad") {
-                    gameOver = true;
-                    document.getElementById("title").textContent = "К сожалению, сегодня без мака 😭";
-                    document.getElementById("cards").innerHTML = "";
-                    document.getElementById("btn").textContent = "Попробовать заново";
-                    return;
-                }
-
-                step = 2;
-                document.getElementById("title").textContent = "Сначала выберем бургер 🍔";
-                render(burgers);
-                return;
-            }
-
-            if (step === 2) {
-                result.burger = val;
-                step = 3;
-                document.getElementById("title").textContent = "Будешь ли ты есть картошку? 🍟";
-                render(yesNo);
-                return;
-            }
-
-            if (step === 3) {
-                result.potato = val;
-
-                if (val === "Да") {
-                    step = 4;
-                    document.getElementById("title").textContent = "Какую картошку берём? 🍟";
-                    render(sizes);
-                } else {
-                    result.size = "Нет";
-                    step = 5;
-                    document.getElementById("title").textContent = "Будешь ли ты есть нагетсы? 🐔";
-                    render(yesNo);
-                }
-                return;
-            }
-
-            if (step === 4) {
-                result.size = val;
-                step = 5;
-                document.getElementById("title").textContent = "Будешь ли ты есть нагетсы? 🐔";
-                render(yesNo);
-                return;
-            }
-
-            if (step === 5) {
-                result.nuggets = val;
-                step = 6;
-
-                document.getElementById("title").innerHTML = `
-                Готово ❤️<br><br>
-                🍔 ${result.burger}<br>
-                🍟 ${result.potato === "Да" ? result.size : "Нет"}<br>
-                🐔 ${result.nuggets}
-            `;
-
-                document.getElementById("cards").innerHTML = "";
-                document.getElementById("btn").textContent = "Заново";
-                startConfetti();
-                return;
-            }
-
-            if (step === 6) {
-                restart();
-            }
-        }
-
-        function restart() {
-            step = 0;
-            selected = false;
-            val = "";
-            gameOver = false;
-
-            result = {
-                chance: "",
-                burger: "",
-                potato: "",
-                size: "",
-                nuggets: ""
-            };
-
-            document.getElementById("intro").classList.remove("hidden");
-            document.getElementById("title").textContent = "Нажми далее";
-            document.getElementById("cards").innerHTML = "";
-            document.getElementById("btn").textContent = "Далее";
-        }
-
-        function startConfetti() {
-            const colors = ["#ff7aa8", "#ffd166", "#b8f7d4", "#cdb4db", "#8ecae6"];
-
-            for (let i = 0; i < 90; i++) {
-                const c = document.createElement("div");
-                c.className = "confetti";
-
-                c.style.left = Math.random() * 100 + "vw";
-                c.style.background = colors[Math.floor(Math.random() * colors.length)];
-                c.style.animationDuration = (2.2 + Math.random() * 1.8) + "s";
-                c.style.animationDelay = (Math.random() * 0.6) + "s";
-
-                document.body.appendChild(c);
-
-                setTimeout(() => {
-                    c.remove();
-                }, 5000);
-            }
-        }
-    </script>
+function confetti(){
+ for(let i=0;i<80;i++){
+  let c=document.createElement("div");
+  c.className="confetti";
+  c.style.left=Math.random()*100+"vw";
+  c.style.background=["pink","yellow","violet"][Math.floor(Math.random()*3)];
+  document.body.appendChild(c);
+  setTimeout(()=>c.remove(),3000);
+ }
+}
+</script>
 
 </body>
 </html>
