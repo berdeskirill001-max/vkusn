@@ -37,8 +37,6 @@ body{
     margin-bottom:20px;
 }
 
-h1{margin:20px 0;}
-
 .cards{
     display:flex;
     gap:20px;
@@ -60,9 +58,7 @@ h1{margin:20px 0;}
     transition:0.3s;
 }
 
-.card:hover{
-    transform:translateY(-8px);
-}
+.card:hover{transform:translateY(-8px);}
 
 .card img{
     max-width:120px;
@@ -91,16 +87,57 @@ button{
 
 .hidden{display:none;}
 
+/* финальный чек */
+.resultBox{
+    background:white;
+    border-radius:25px;
+    padding:25px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.2);
+    max-width:300px;
+    margin:auto;
+}
+
+.item{
+    padding:10px;
+    margin:5px 0;
+    border-radius:10px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.item:hover{
+    background:#ffe4ef;
+}
+
+/* модалка */
+.modal{
+    position:fixed;
+    top:0;left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.modalBox{
+    background:white;
+    padding:20px;
+    border-radius:20px;
+    max-width:300px;
+}
+
 .confetti{
     position:fixed;
-    top:-20px;
-    width:10px;
-    height:10px;
-    animation:fall 3s linear forwards;
+    top:-30px;
+    width:8px;
+    height:14px;
+    animation:fall linear forwards;
 }
 
 @keyframes fall{
-    to{transform:translateY(110vh);opacity:0;}
+    to{transform:translateY(110vh) rotate(720deg);opacity:0;}
 }
 </style>
 </head>
@@ -123,11 +160,11 @@ button{
 <script>
 let step=0, selected=false, val="", gameOver=false;
 
-let result={};
+let result={burger:"",potato:"",nuggets:""};
 
 const chance=[
- {text:"Проходишь дальше",good:true},
- {text:"Сегодня без мака 😭",good:false}
+ {text:"Проходишь дальше"},
+ {text:"Сегодня без мака 😭"}
 ];
 
 const burgers=[
@@ -139,10 +176,20 @@ const burgers=[
 const yesNo=["Да","Нет"];
 const sizes=["Маленькая","Средняя"];
 
+const info={
+ "Биг Хит":"вес: 228г\n524 калории",
+ "Чикен Премьер":"вес: 234г\n525 калорий",
+ "Гранд Де Люкс":"вес: 251г\n570 калорий",
+ "Маленькая":"Картофель фри\n76г\n220 калорий",
+ "Средняя":"Картофель фри\n110г\n318 калорий",
+ "Нагетсы":"72г\n179 калорий",
+ "Соус":"25г\n49 калорий"
+};
+
 function shuffle(a){return [...a].sort(()=>Math.random()-0.5);}
 
 function render(data){
- selected=false; val="";
+ selected=false;
  let box=document.getElementById("cards");
  box.innerHTML="";
  let arr=shuffle(data);
@@ -176,7 +223,7 @@ function render(data){
 
 function next(){
 
- if(gameOver){restart();return;}
+ if(gameOver){location.reload();return;}
 
  if(step===0){
   document.getElementById("intro").classList.add("hidden");
@@ -232,33 +279,54 @@ function next(){
   result.nuggets=val;
   step=6;
 
-  document.getElementById("title").innerHTML=`
-  ТВОЙ ЗАКАЗ ❤️<br><br>
-  🍔 ${result.burger}<br>
-  🍟 ${result.potato}<br>
-  🐔 ${result.nuggets}
+  document.getElementById("cards").innerHTML=`
+  <div class="resultBox">
+    <h2>Твой заказ ❤️</h2>
+
+    <div class="item" onclick="showInfo('${result.burger}')">🍔 ${result.burger}</div>
+    <div class="item" onclick="showInfo('${result.potato}')">🍟 ${result.potato}</div>
+    <div class="item" onclick="showInfo('Нагетсы')">🐔 Нагетсы</div>
+    <div class="item" onclick="showInfo('Соус')">🥫 Соус кисло-сладкий</div>
+
+  </div>
   `;
 
-  document.getElementById("cards").innerHTML="";
+  document.getElementById("title").textContent="";
   document.getElementById("btn").textContent="Заново";
   confetti();
  }
 
- else restart();
+ else location.reload();
 }
 
-function restart(){
- location.reload();
+function showInfo(name){
+ let text=info[name]||"нет данных";
+
+ let modal=document.createElement("div");
+ modal.className="modal";
+
+ modal.innerHTML=`
+ <div class="modalBox">
+  <h3>${name}</h3>
+  <p>${text}</p>
+  <button onclick="this.parentElement.parentElement.remove()">Ок</button>
+ </div>
+ `;
+
+ document.body.appendChild(modal);
 }
 
 function confetti(){
- for(let i=0;i<80;i++){
+ const colors=["#ff7aa8","#ffd166","#b8f7d4","#cdb4db"];
+
+ for(let i=0;i<100;i++){
   let c=document.createElement("div");
   c.className="confetti";
   c.style.left=Math.random()*100+"vw";
-  c.style.background=["pink","yellow","violet"][Math.floor(Math.random()*3)];
+  c.style.background=colors[Math.floor(Math.random()*colors.length)];
+  c.style.animationDuration=(2+Math.random()*2)+"s";
   document.body.appendChild(c);
-  setTimeout(()=>c.remove(),3000);
+  setTimeout(()=>c.remove(),4000);
  }
 }
 </script>
